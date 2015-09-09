@@ -1,0 +1,6 @@
+c:\users\jason\documents\visual studio 2013\Projects\IntToWords\IntToWords\bin\Debug\IntToWords.exe.config
+c:\users\jason\documents\visual studio 2013\Projects\IntToWords\IntToWords\bin\Debug\IntToWords.exe
+c:\users\jason\documents\visual studio 2013\Projects\IntToWords\IntToWords\bin\Debug\IntToWords.pdb
+c:\users\jason\documents\visual studio 2013\Projects\IntToWords\IntToWords\obj\Debug\IntToWords.csprojResolveAssemblyReference.cache
+c:\users\jason\documents\visual studio 2013\Projects\IntToWords\IntToWords\obj\Debug\IntToWords.exe
+c:\users\jason\documents\visual studio 2013\Projects\IntToWords\IntToWords\obj\Debug\IntToWords.pdb
