@@ -13,11 +13,14 @@ namespace IntToWords
     {
         #region Constant Variables 
 
-        private static string SPACE = " ";
-
+        private const string SPACE = " ";
+        private const string TEEN = "TEEN";
+        private const string TEN = "X";
+        private const string TEN_THOUSAND = "X Thousand";
+        private const string TEN_MILLION = "X Million";
         #endregion
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             int tempNum = -1;
 
@@ -32,10 +35,10 @@ namespace IntToWords
                 else
                 {
                     Console.WriteLine("Not a number.");
-                }
+                }                
             }
             else
-            { // Using as an api
+            { // Using as an api                
                 foreach (string num in args)
                 {
                     if (Int32.TryParse(num, out tempNum))
@@ -45,16 +48,16 @@ namespace IntToWords
                     else
                     {
                         Console.WriteLine("Not a number.");
-                    }
-                }
+                    }                    
+                }                
             }
             Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
+            Console.ReadKey();                
         }
 
-        private static string ConvertToEnglishWord(int number)
+        private static string ConvertToEnglishWord(int input)
         {
-            string numToString = number.ToString();
+            string numToString = input.ToString();
             int[] numArray = ToIntArray(numToString) ;
             string convertedNumberToWord = "";
             int count = numArray.Count();
@@ -66,33 +69,27 @@ namespace IntToWords
                 if (position != numArray.Count())
                 {                    
                     place = GetPosition(num, count);
-                    if (place.Contains("X") || place.Contains("TEEN")) // If place contains any placeholders
+                    if (place.Contains(TEN) || place.Contains(TEEN)) // If place contains any placeholders
                     {
                         string numToReplacePlaceholder = "";
-                        if (place == Place.Ten.ToString())
-                        { 
-                            numToReplacePlaceholder = GetTens(num, numArray[position + 1]); 
-                        }
-                        else if (place == Place.TenMillion.ToString() || place == Place.TenThousand.ToString())
-                        {                            
-                            int nextNumber = numArray[position + 1];
-                            numToReplacePlaceholder = GetTens(num, nextNumber);                                                        
-                            if (nextNumber != 0 && num != 1) // twenty-one, twenty-two, etc
-                            {
-                                if (num != 0)
-                                { 
-                                    numToReplacePlaceholder += "-"; 
-                                }
-                                numToReplacePlaceholder += GetSingleDigit(nextNumber);
-                            }
-                            count--; position++;
-                        }                        
-                        else if (place == Place.Teen.ToString())
+                        switch (place)
                         {
-                            numToReplacePlaceholder = GetTeens(numArray[position + 1]);
-                            return (convertedNumberToWord += SPACE + place.Replace("TEEN", numToReplacePlaceholder)).Trim(); // We're done here
-                        }
-                        convertedNumberToWord += SPACE + place.Replace("X", numToReplacePlaceholder);
+                            case TEEN:                                
+                            case TEN:
+                                numToReplacePlaceholder = ReplacePlaceholder(num, position, numArray, place);
+                                if (place == TEEN) 
+                                {
+                                    return (convertedNumberToWord += SPACE + place.Replace(TEEN, numToReplacePlaceholder)).Trim(); // We're done here
+                                }   
+                                break;                            
+                            case TEN_THOUSAND:                                
+                            case TEN_MILLION:
+                                numToReplacePlaceholder = ReplacePlaceholder(num, ref position, ref count, numArray);
+                                break;
+                            default:
+                                break;
+                        }                        
+                        convertedNumberToWord += SPACE + place.Replace(TEN, numToReplacePlaceholder);
                     }
                     else if (place == Place.Hundred.ToString())
                     { // Special occasion such as 1011
@@ -135,6 +132,7 @@ namespace IntToWords
             return convertedNumberToWord.Trim();
         }
 
+        #region Helpers
         private static string GetPosition(int number, int count)
         {
             return Place.Compare(number, count);
@@ -154,6 +152,35 @@ namespace IntToWords
         {
             return DoubleDigit.Compare(number, nextNumber);
         }
+
+        private static string ReplacePlaceholder(int num, int position, int[] numArray, string place)
+        {
+            if (place == Place.Ten.ToString())
+            {
+                return GetTens(num, numArray[position + 1]);
+            }
+            else
+            { 
+                return GetTeens(numArray[position + 1]);
+            }
+        }
+
+        private static string ReplacePlaceholder(int num, ref int position, ref int count, int[] numArray)
+        {
+            string numToReplacePlaceholder = "";
+            int nextNumber = numArray[position + 1];
+            numToReplacePlaceholder = GetTens(num, nextNumber);
+            if (nextNumber != 0 && num != 1) // twenty-one, twenty-two, etc
+            {
+                if (num != 0)
+                {
+                    numToReplacePlaceholder += "-";
+                }
+                numToReplacePlaceholder += GetSingleDigit(nextNumber);
+            }
+            count--; position++;
+            return numToReplacePlaceholder;
+        }
         // Returns Int array from string
         private static int[] ToIntArray(string str)
         {
@@ -164,5 +191,6 @@ namespace IntToWords
             }
             return arr;
         }
+        #endregion
     }
 }
