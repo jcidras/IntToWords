@@ -6,10 +6,29 @@ namespace IntToWords
     #region Using Statements
     using System;
     using System.Linq;
+    using System.Collections.Generic;
     using Enums;
     #endregion
 
-    public class Program
+    #region Exceptions
+    public class NoParameterException : Exception
+    {
+        public NoParameterException() : base("No incoming parameters. aborting conversion.")
+        {
+
+        }
+    }
+
+    public class NonPositiveIntegerException : Exception
+    {
+        public NonPositiveIntegerException() : base("Invalid conversion operation, integer must be a non-negative integer. Aborting conversion.")
+        {
+
+        }        
+    }
+    #endregion
+
+    public class ConvertIntToWords
     {
         #region Constant Variables 
 
@@ -20,39 +39,34 @@ namespace IntToWords
         private const string TEN_MILLION = "X Million";
         #endregion
 
-        public static void Main(string[] args)
+        /// <summary>
+        /// ConvertIntoToWords brings in multiple non-negative integers as strings and returns their English counterparts.
+        /// </summary>
+        /// <param name="args">Array of strings as non-negative integers. Throws: NoParameterException if there are not any items in argument. NonPositiveIntegerException if any strings in arugment cannot be parsed or is a negative integer.</param>
+        /// <returns></returns>
+        public static string[] ConvertToWords(string[] args)
         {
             int tempNum = -1;
-
+            List<string> convertedIntToWords = new List<string>();
             if (args.Count() == 0)
             {
-                Console.WriteLine("Enter a number:");
-                string num = Console.ReadLine();
-                if (Int32.TryParse(num, out tempNum))
-                {
-                    Console.WriteLine(ConvertToEnglishWord(tempNum));
-                }
-                else
-                {
-                    Console.WriteLine("Not a number.");
-                }                
+                throw new NoParameterException();
             }
             else
-            { // Using as an api                
+            {           
                 foreach (string num in args)
                 {
-                    if (Int32.TryParse(num, out tempNum))
+                    if (Int32.TryParse(num, out tempNum) && tempNum > 0)
                     {
-                        Console.WriteLine(ConvertToEnglishWord(tempNum));
+                        convertedIntToWords.Add(ConvertToEnglishWord(tempNum));
                     }
                     else
                     {
-                        Console.WriteLine("Not a number.");
+                        throw new NonPositiveIntegerException();
                     }                    
                 }                
             }
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();                
+            return convertedIntToWords.ToArray();
         }
 
         private static string ConvertToEnglishWord(int input)
