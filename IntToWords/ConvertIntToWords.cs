@@ -13,7 +13,7 @@ namespace IntToWords
     #region Exceptions
     public class NoParameterException : Exception
     {
-        public NoParameterException() : base("No incoming parameters. aborting conversion.")
+        public NoParameterException() : base("No incoming parameters. Aborting conversion.")
         {
 
         }
