@@ -42,8 +42,10 @@ namespace IntToWords
         /// <summary>
         /// ConvertIntoToWords brings in multiple non-negative integers as strings and returns their English counterparts.
         /// </summary>
-        /// <param name="args">Array of strings as non-negative integers. Throws: NoParameterException if there are not any items in argument. NonPositiveIntegerException if any strings in arugment cannot be parsed or is a negative integer.</param>
-        /// <returns></returns>
+        /// <param name="args">Array of <c>string</c> as non-negative integers.</param>
+        /// <exception cref="System.Exception">NoParameterException if there are not any items in argument.</exception>
+        /// <exception cref="System.Exception">NonPositiveIntegerException if any strings in arugment cannot be parsed or is a negative integer.</exception>
+        /// <returns>Array of <c>string</c> of converted integers as English words</returns>
         public static string[] ConvertToWords(string[] args)
         {
             int tempNum = -1;
